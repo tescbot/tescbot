@@ -1,0 +1,26 @@
+- Play music (spotify, youtube, all would be nice)
+- Join spotify jam
+- Make memes
+- Have jeremy clarkson text to speech
+- Say text to speech phrase when it joins vc
+- Chat GPT interface
+- Spin the wheel with input list
+- Soundboard
+- Audio meme of the day
+- Picture meme of the day
+- Flagle interface
+- Globle interface
+- Wordle interface
+- FPL tips
+- NBA best matchups
+- UKC news
+- Gambling games for us: poker, blackjack, contrast wist
+- Participate in discord mini games with us
+- Raves near you
+- Tell us about jojo flaves deals
+- UoS film unit films coming this week + letterboxd reviews
+- Interface with letterboxd (your watchlist and shit, tell you if it's being shown)
+- Cheapest game of the day with good reviews (at least 1000) (use steam.db)
+- D&D game
+- Uni budgeter
+- Reccommended recipe (tags)
