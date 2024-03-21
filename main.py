@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from os import getenv
+import os
 from datetime import datetime, UTC
 
 import discord
@@ -31,7 +31,7 @@ class Bot(commands.Bot):
 
 
 async def main():
-    bot_token = getenv("BOT_TOKEN")
+    bot_token = os.getenv("BOT_TOKEN")
     assert bot_token is not None
 
     # Setup logger
@@ -42,6 +42,7 @@ async def main():
     console_out.setLevel(logging.INFO)
     console_out.setFormatter(formatter)
 
+    os.makedirs("logs", exist_ok=True)
     logfile_out = logging.FileHandler(f"logs/{datetime.now(UTC).strftime("H%H_M%M.d%d_m%m_y%Y.log")}.log", "w")
     logfile_out.setLevel(logging.DEBUG)
     logfile_out.setFormatter(formatter)
