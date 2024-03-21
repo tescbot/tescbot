@@ -1,4 +1,4 @@
-from typing import Any
+from datetime import datetime, UTC
 
 import discord
 from discord import app_commands
@@ -6,6 +6,7 @@ from discord.ext import commands
 
 from base.cog import BaseCog
 from main import Bot
+
 
 class Errors(BaseCog):
     """Global Error Handler"""
@@ -17,10 +18,10 @@ class Errors(BaseCog):
     @commands.Cog.listener()
     async def on_command_error(
         self,
-        ctx: Any,
+        ctx: commands.Context,
         error: commands.CommandError,
     ):
-        """Handle prefix command errors here."""
+        """Handles chat command errors."""
         self.logger.exception(error)
         raise error
 
@@ -32,7 +33,7 @@ class Errors(BaseCog):
         """Handle slash command errors here."""
         self.logger.exception(error)
 
-        error_text: str = error.__class__.__name__
+        error_text = "⚠️ There was an error running this command."
         if interaction.response.is_done():
             await interaction.followup.send(error_text, ephemeral=True)
         else:

@@ -5,11 +5,12 @@ from datetime import datetime, UTC
 
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
-
-load_dotenv()
 
 import cogs
+
+from dotenv import load_dotenv
+load_dotenv()
+
 
 class Bot(commands.Bot):
     def __init__(self, *args, logger: logging.Logger, **kwargs):
@@ -27,7 +28,8 @@ class Bot(commands.Bot):
         )
         for ext, result in zip(cogs.initial_extensions, results):
             if isinstance(result, Exception):
-                self.logger.error(f"Failed to load extension '{ext}': <{result.__class__.__name__}> {result}")
+                self.logger.error(f"Failed to load extension '{ext}': <{
+                                  result.__class__.__name__}> {result}")
 
 
 async def main():
@@ -36,18 +38,21 @@ async def main():
 
     # Setup logger
 
-    formatter = logging.Formatter(fmt="%(asctime)s | %(levelname)s | %(module)s:%(funcName)s:%(lineno)d - %(message)s")
-    
+    formatter = logging.Formatter(
+        fmt="%(asctime)s | %(levelname)s | %(module)s:%(funcName)s:%(lineno)d - %(message)s")
+
     console_out = logging.StreamHandler()
     console_out.setLevel(logging.INFO)
     console_out.setFormatter(formatter)
 
     os.makedirs("logs", exist_ok=True)
-    logfile_out = logging.FileHandler(f"logs/{datetime.now(UTC).strftime("H%H_M%M.d%d_m%m_y%Y.log")}.log", "w")
-    logfile_out.setLevel(logging.DEBUG)
+    logfile_out = logging.FileHandler(
+        f"logs/{datetime.now(UTC).strftime("h%H_m%M_d%d_m%m_y%Y.log")}.log", "w")
+    logfile_out.setLevel(logging.INFO)
     logfile_out.setFormatter(formatter)
 
     logger = logging.getLogger("Bot")
+    logger.setLevel(logging.INFO)
     discord_logger = logging.getLogger("discord")
     logging.getLogger('discord.http').setLevel(logging.INFO)
 
@@ -59,7 +64,7 @@ async def main():
     # Create bot
 
     bot = Bot(
-        command_prefix="!",
+        command_prefix="jeremy ",
         intents=discord.Intents().all(),
         logger=logger
     )
