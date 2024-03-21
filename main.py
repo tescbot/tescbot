@@ -47,7 +47,7 @@ async def main():
 
     os.makedirs("logs", exist_ok=True)
     logfile_out = logging.FileHandler(
-        f"logs/{datetime.now(UTC).strftime("h%H_m%M_d%d_m%m_y%Y.log")}.log", "w")
+        f"logs/{datetime.now(UTC).strftime('H%H_M%M.d%d_m%m_y%Y.log')}.log", "w")
     logfile_out.setLevel(logging.INFO)
     logfile_out.setFormatter(formatter)
 
