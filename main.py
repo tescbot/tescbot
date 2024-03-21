@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from logging.handlers import TimedRotatingFileHandler
 import os
 from datetime import datetime, UTC
 
@@ -32,6 +33,10 @@ class Bot(commands.Bot):
                                   result.__class__.__name__}> {result}")
 
 
+def get_logfile_name(filename_fmt: str) -> str:
+    return filename_fmt % {"dt": datetime.now(UTC).strftime("%Y-%m-%d")}
+
+
 async def main():
     bot_token = os.getenv("BOT_TOKEN")
     assert bot_token is not None
@@ -46,8 +51,9 @@ async def main():
     console_out.setFormatter(formatter)
 
     os.makedirs("logs", exist_ok=True)
-    logfile_out = logging.FileHandler(
-        f"logs/{datetime.now(UTC).strftime('H%H_M%M.d%d_m%m_y%Y.log')}.log", "w")
+    logfile_out = TimedRotatingFileHandler(
+        get_logfile_name("logs/%(dt)s.log"), atTime="midnight")
+    logfile_out.namer = get_logfile_name
     logfile_out.setLevel(logging.INFO)
     logfile_out.setFormatter(formatter)
 
