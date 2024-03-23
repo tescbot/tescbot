@@ -11,39 +11,40 @@ class Owner(BaseCog):
     """Bot owner commands"""
 
     async def cog_check(self, ctx: commands.Context[Bot]) -> bool:
+        # Checks if the user is the owner, or in the owning team, of the bot.
         return await self.bot.is_owner(ctx.author)
 
     @commands.command(hidden=True)
-    async def load(self, ctx: commands.Context[Bot], *, module: str):
-        """Loads a module."""
+    async def load(self, ctx: commands.Context[Bot], *, cog_name: str):
+        """Loads a cog."""
         try:
-            await self.bot.load_extension(module)
+            await self.bot.load_extension(cog_name)
         except commands.ExtensionError as e:
             await ctx.send(f"{e.__class__.__name__}: {e}")
         else:
             await ctx.send("\N{OK HAND SIGN}")
 
     @commands.command(hidden=True)
-    async def unload(self, ctx: commands.Context[Bot], *, module: str):
-        """Unloads a module."""
+    async def unload(self, ctx: commands.Context[Bot], *, cog_name: str):
+        """Unloads a cog."""
         try:
-            await self.bot.unload_extension(module)
+            await self.bot.unload_extension(cog_name)
         except commands.ExtensionError as e:
             await ctx.send(f"{e.__class__.__name__}: {e}")
         else:
             await ctx.send("\N{OK HAND SIGN}")
 
     @commands.group(name="reload", hidden=True, invoke_without_command=True)
-    async def _reload(self, ctx: commands.Context[Bot], *, module: str):
-        """Reloads a module."""
+    async def _reload(self, ctx: commands.Context[Bot], *, cog_name: str):
+        """Reloads a cog."""
         try:
-            await self.bot.reload_extension(module)
+            await self.bot.reload_extension(cog_name)
         except commands.ExtensionError as e:
             await ctx.send(f"{e.__class__.__name__}: {e}")
         else:
             await ctx.send("\N{OK HAND SIGN}")
 
-    @commands.command()
+    @commands.command(hidden=True)
     @commands.guild_only()
     async def sync(
         self,
@@ -51,6 +52,7 @@ class Owner(BaseCog):
         guilds: commands.Greedy[discord.Object],
         spec: Optional[Literal["~", "*", "^"]] = None,
     ) -> None:
+        """Syncs slash commands."""
         if not guilds:
             if spec == "~":
                 synced = await ctx.bot.tree.sync(guild=ctx.guild)

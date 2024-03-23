@@ -1,5 +1,3 @@
-from datetime import datetime, UTC
-
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -18,7 +16,7 @@ class Errors(BaseCog):
     @commands.Cog.listener()
     async def on_command_error(
         self,
-        ctx: commands.Context,
+        ctx: commands.Context[Bot],
         error: commands.CommandError,
     ):
         """Handles chat command errors."""
@@ -30,7 +28,7 @@ class Errors(BaseCog):
         interaction: discord.Interaction[Bot],
         error: app_commands.AppCommandError,
     ):
-        """Handle slash command errors here."""
+        """Handles slash command errors."""
         self.logger.exception(error)
 
         error_text = "⚠️ There was an error running this command."
