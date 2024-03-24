@@ -1,5 +1,6 @@
 initial_extensions = [
     "cogs.owner",
     "cogs.errors",
-    "cogs.misc"
+    "cogs.misc",
+    "cogs.music"
 ]
