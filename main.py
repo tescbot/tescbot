@@ -3,6 +3,7 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 import os
 from datetime import datetime, UTC
+from typing import Callable
 
 import discord
 from discord.ext import commands
@@ -38,9 +39,11 @@ class Bot(commands.Bot):
                                   result.__class__.__name__}> {result}")
 
 
-def get_logfile_name(filename_fmt: str) -> str:
+def get_logfile_namer(filename_fmt: str) -> Callable[[str], str]:
     """Generates the name of each log file."""
-    return filename_fmt % {"dt": datetime.now(UTC).strftime("%Y-%m-%d")}
+    def namer(prev_filename: str = "") -> str:
+        return filename_fmt % {"dt": datetime.now(UTC).strftime("%Y-%m-%d")}
+    return namer
 
 
 async def main():
@@ -58,9 +61,9 @@ async def main():
 #
     # Set up the file output for the logger
     os.makedirs("logs", exist_ok=True)
-    logfile_out = TimedRotatingFileHandler(
-        get_logfile_name("logs/%(dt)s.log"), atTime="midnight")
-    logfile_out.namer = get_logfile_name
+    namer = get_logfile_namer("logs/%(dt)s.log")
+    logfile_out = TimedRotatingFileHandler(namer(), atTime="midnight")
+    logfile_out.namer = namer
     logfile_out.setLevel(logging.INFO)
     logfile_out.setFormatter(formatter)
 
