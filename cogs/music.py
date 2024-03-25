@@ -26,8 +26,7 @@ class Song:
         self.stream_url = stream_url
 
     @classmethod
-    def from_query(cls, query: str) -> Song | None:
-        # TODO: Accept URLs
+    def from_query(cls, query: str) -> list[Song]:
         # TODO: Accept playlists
         # TODO: Accept spotify, soundcloud, etc.
 
@@ -86,14 +85,14 @@ class Music(BaseCog):
                 self.play_next(), self.bot.loop))
 
     @commands.command()
-    async def join(self, ctx: commands.Context[Bot], *, voice_channel: Optional[discord.VoiceChannel] = None):
+    async def join(self, ctx: commands.Context[Bot], voice_channel: Optional[discord.VoiceChannel] = None):
         """Joins your, or the specified, voice channel."""
         if voice_channel is None:
-            try:
-                voice_channel = ctx.author.voice.channel
-            except:
+            if ctx.author.voice is None:
                 await ctx.send("You must join a voice channel first.")
                 return
+
+            voice_channel = ctx.author.voice.channel
 
         if self.vc is not None and self.vc.is_connected():
             if self.vc.channel == voice_channel:

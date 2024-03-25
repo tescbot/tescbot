@@ -11,6 +11,7 @@ from discord.ext import commands
 import cogs
 
 from dotenv import load_dotenv
+
 load_dotenv()
 
 
@@ -38,10 +39,13 @@ class Bot(commands.Bot):
                 self.logger.error(f"Failed to load extension '{ext}': <{result.__class__.__name__}> {result}")
 
 
+
 def get_logfile_namer(filename_fmt: str) -> Callable[[str], str]:
     """Generates the name of each log file."""
+
     def namer(prev_filename: str = "") -> str:
         return filename_fmt % {"dt": datetime.now(UTC).strftime("%Y-%m-%d")}
+
     return namer
 
 
@@ -51,13 +55,14 @@ async def main():
 
     # --- Setup logger
     formatter = logging.Formatter(
-        fmt="%(asctime)s | %(levelname)s | %(module)s:%(funcName)s:%(lineno)d - %(message)s")
+        fmt="%(asctime)s | %(levelname)s | %(module)s:%(funcName)s:%(lineno)d - %(message)s"
+    )
 
     # Create a console output for the logger
     console_out = logging.StreamHandler()
     console_out.setLevel(logging.INFO)
     console_out.setFormatter(formatter)
-#
+
     # Set up the file output for the logger
     os.makedirs("logs", exist_ok=True)
     namer = get_logfile_namer("logs/%(dt)s.log")
@@ -78,11 +83,7 @@ async def main():
     discord_logger.addHandler(logfile_out)
 
     # --- Create bot
-    bot = Bot(
-        command_prefix="jeremy ",
-        intents=discord.Intents().all(),
-        logger=logger
-    )
+    bot = Bot(command_prefix="jeremy ", intents=discord.Intents().all(), logger=logger)
 
     # Start the bot
     async with bot:
@@ -90,4 +91,7 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        pass
