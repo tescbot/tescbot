@@ -4,5 +4,5 @@ initial_extensions = [
     "cogs.misc",
     "cogs.music",
     "cogs.dice",
-    "cogs.gpt"
+    "cogs.steam"
 ]
