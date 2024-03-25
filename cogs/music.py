@@ -154,8 +154,7 @@ class Music(BaseCog):
 
         self.vc.stop()
         await self.play_next()
-        await ctx.send(f"Skipping the current song. Now playing: {
-            self.current_song.to_hyperlink()}")
+        await ctx.send(f"Skipping the current song. Now playing: {self.current_song.to_hyperlink()}")
 
     @commands.command()
     async def pause(self, ctx: commands.Context[Bot]):

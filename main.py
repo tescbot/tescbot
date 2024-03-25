@@ -35,8 +35,7 @@ class Bot(commands.Bot):
 
         for ext, result in zip(cogs.initial_extensions, results):
             if isinstance(result, Exception):
-                self.logger.error(f"Failed to load extension '{ext}': <{
-                                  result.__class__.__name__}> {result}")
+                self.logger.error(f"Failed to load extension '{ext}': <{result.__class__.__name__}> {result}")
 
 
 def get_logfile_namer(filename_fmt: str) -> Callable[[str], str]:
