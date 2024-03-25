@@ -3,5 +3,5 @@ initial_extensions = [
     "cogs.errors",
     "cogs.misc",
     "cogs.music",
-    "cogs.dice"
+    "cogs.dice",
 ]

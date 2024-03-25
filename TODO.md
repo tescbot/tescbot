@@ -1,4 +1,3 @@
-- Play music (spotify, youtube, all would be nice)
 - Join spotify jam
 - Make memes
 - Have jeremy clarkson text to speech
