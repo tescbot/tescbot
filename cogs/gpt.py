@@ -1,12 +1,9 @@
-import asyncio
-import discord
 from discord.ext import commands
 
 from base.cog import BaseCog
 from main import Bot
 
 import os
-from openai import OpenAI
 from openai import AsyncOpenAI
 
 
