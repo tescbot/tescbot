@@ -15,4 +15,4 @@ class BaseCog(commands.Cog):
 
     @property
     def logger(self):
-        return logging.getLogger("Bot")
+        return logging.getLogger("bot")
