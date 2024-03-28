@@ -1,7 +1,7 @@
 from discord.ext import commands
 import os
 
-from base.cog import BaseCog
+from base import BaseCog
 from main import Bot
 
 from steam import Steam as SteamAPI

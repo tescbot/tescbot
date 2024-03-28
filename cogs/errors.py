@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from base.cog import BaseCog
+from base import BaseCog
 from main import Bot
 
 

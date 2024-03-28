@@ -8,7 +8,7 @@ from discord.ext import commands
 from youtubesearchpython import VideosSearch
 from yt_dlp import YoutubeDL
 
-from base.cog import BaseCog
+from base import BaseCog
 from main import Bot
 
 

@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from base.cog import BaseCog
+from base import BaseCog
 from main import Bot
 
 import os
@@ -21,6 +21,7 @@ class GPT(BaseCog):
         )
         async for chunk in stream:
             ctx.send(chunk.choices[0].delta.content or "", end="")
+
 
 async def setup(bot: Bot):
     await bot.add_cog(GPT(bot))

@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-from base.cog import BaseCog
+from base import BaseCog
 from main import Bot
 
 
