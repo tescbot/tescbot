@@ -14,7 +14,10 @@ class Bot(commands.Bot):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.logger: logging.Logger | None = None
+
+    @property
+    def logger(self) -> logging.Logger:
+        return logging.getLogger("bot")
 
     async def on_ready(self):
         """Executes when the bot is connected and online."""
@@ -31,7 +34,7 @@ class Bot(commands.Bot):
         for ext, result in zip(cogs.initial_extensions, results):
             if isinstance(result, Exception):
                 self.logger.error(
-                    f"Failed to load extension '{ext}': <{result.__class__.__name__}> {result}"
+                    f"Failed to load extension '{ext}': {result}"
                 )
 
     def setup_logging(self) -> None:
@@ -50,7 +53,6 @@ class Bot(commands.Bot):
         logfile_out.setFormatter(CustomFormatter())
 
         # Create the logger and add the outputs
-        self.logger = logging.getLogger("bot")
         self.logger.setLevel(logging.INFO)
         self.logger.addHandler(console_out)
         self.logger.addHandler(logfile_out)

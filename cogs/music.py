@@ -17,7 +17,7 @@ class Song:
     ffmpeg = "ffmpeg"
     ffmpeg_options = {
         "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
-        "options": "-vn"
+        "options": "-vn",
     }
 
     def __init__(self, title: str, source: str, stream_url: str) -> None:
@@ -33,8 +33,7 @@ class Song:
         results = VideosSearch(query, limit=1).result()["result"]
         if len(results) > 0:
             result = results[0]
-            stream_url = Song.ytdl.extract_info(
-                result["link"], download=False)["url"]
+            stream_url = cls.ytdl.extract_info(result["link"], download=False)["url"]
             return cls(result["title"], result["link"], stream_url)
         else:
             return None
@@ -42,9 +41,13 @@ class Song:
     def to_audio_source(self) -> discord.AudioSource:
         """Converts the song into a compatible discord audio source."""
         # Check if the executeable exists
-        assert shutil.which(Song.ffmpeg) is not None
+        assert (
+            shutil.which(self.ffmpeg) is not None
+        ), "Cannot find your ffmpeg executable. Check if it's downloaded or if it's set in your PATH variables."
         # Converts the audio stream into a discord audio source using ffmpeg
-        return discord.FFmpegPCMAudio(self.stream_url, executable=Song.ffmpeg, **Song.ffmpeg_options)
+        return discord.FFmpegPCMAudio(
+            self.stream_url, executable=self.ffmpeg, **self.ffmpeg_options
+        )
 
     def to_hyperlink(self, embed=True) -> str:
         link = self.source
@@ -52,11 +55,11 @@ class Song:
             link = f"<{link}>"
         return f"[{self.title}]({link})"
 
-    def __eq__(self, __value: object) -> bool:
-        if not isinstance(__value, Song):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Song):
             return False
 
-        return self.source == __value.source
+        return self.source == other.source
 
 
 class Music(BaseCog):
@@ -70,22 +73,34 @@ class Music(BaseCog):
 
     @property
     def vc(self) -> discord.VoiceClient | None:
-        if len(self.bot.voice_clients) > 0:
-            return self.bot.voice_clients[0]
+        # TODO: For now, assuming it will only be used in one server at a time
+        vcs = self.bot.voice_clients
+        if len(vcs) > 0:
+            return vcs[0]
         else:
             return None
 
     async def play_next(self):
         """Plays the next song in the queue."""
-        assert self.vc is not None
+        assert (
+            self.vc is not None
+        ), "Cannot play the next song as the bot is not connected to a voice channel."
 
         if len(self.music_queue) > 0:
             self.current_song = self.music_queue.pop(0)
-            self.vc.play(self.current_song.to_audio_source(), after=lambda e: asyncio.run_coroutine_threadsafe(
-                self.play_next(), self.bot.loop))
+            self.vc.play(
+                self.current_song.to_audio_source(),
+                after=lambda e: asyncio.run_coroutine_threadsafe(
+                    self.play_next(), self.bot.loop
+                ),
+            )
 
     @commands.command()
-    async def join(self, ctx: commands.Context[Bot], voice_channel: Optional[discord.VoiceChannel] = None):
+    async def join(
+        self,
+        ctx: commands.Context[Bot],
+        voice_channel: Optional[discord.VoiceChannel] = None,
+    ):
         """Joins your, or the specified, voice channel."""
         if voice_channel is None:
             if ctx.author.voice is None:
@@ -153,7 +168,9 @@ class Music(BaseCog):
 
         self.vc.stop()
         await self.play_next()
-        await ctx.send(f"Skipping the current song. Now playing: {self.current_song.to_hyperlink()}")
+        await ctx.send(
+            f"Skipping the current song. Now playing: {self.current_song.to_hyperlink()}"
+        )
 
     @commands.command()
     async def pause(self, ctx: commands.Context[Bot]):
@@ -200,7 +217,12 @@ class Music(BaseCog):
         """Gets the queue. Also contains the subcommands for adding and removing from the queue"""
         if ctx.invoked_subcommand is None:
             if len(self.music_queue) > 0:
-                await ctx.send("\n".join(f"{i+1}. {song.to_hyperlink(False)}" for i, song in enumerate(self.music_queue)))
+                await ctx.send(
+                    "\n".join(
+                        f"{i+1}. {song.to_hyperlink(False)}"
+                        for i, song in enumerate(self.music_queue)
+                    )
+                )
             else:
                 await ctx.send("The queue is empty.")
 

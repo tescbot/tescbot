@@ -10,7 +10,7 @@ load_dotenv()
 
 def main():
     bot_token = os.getenv("BOT_TOKEN")
-    assert bot_token is not None
+    assert bot_token is not None, "BOT_TOKEN is not set in your .env file."
 
     bot = Bot(command_prefix="jeremy ", intents=discord.Intents().all())
     bot.setup_logging()

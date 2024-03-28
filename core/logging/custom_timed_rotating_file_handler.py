@@ -1,4 +1,4 @@
-from typing import Callable, Iterable, Any, Optional
+from typing import Callable, Optional
 from logging.handlers import TimedRotatingFileHandler
 
 

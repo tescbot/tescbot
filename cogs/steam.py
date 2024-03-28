@@ -11,7 +11,7 @@ class Steam(BaseCog):
     def __init__(self, bot: Bot) -> None:
         super().__init__(bot)
         key = os.getenv("STEAM_API_KEY")
-        assert key is not None
+        assert key is not None, "STEAM_API_KEY is not set in your .env file."
 
         self.steam_api = SteamAPI(key)
 
